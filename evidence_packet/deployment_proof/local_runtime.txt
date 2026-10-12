@@ -1,0 +1,17 @@
+Biomedical Drug Safety Intelligence System
+Local Runtime Proof
+Captured: 2026-10-12T15:20:53.3996199+05:30
+
+Python Version:
+Python 3.12.7
+
+Uvicorn Version:
+Running uvicorn 0.54.0 with CPython 3.12.7 on Windows
+
+Application Entry Point: app.main:app
+Local URL: http://127.0.0.1:8000/
+API Documentation: http://127.0.0.1:8000/docs
+Health Endpoint: http://127.0.0.1:8000/health
+
+Deployment Type: Local development environment
+Production Deployment: Not demonstrated

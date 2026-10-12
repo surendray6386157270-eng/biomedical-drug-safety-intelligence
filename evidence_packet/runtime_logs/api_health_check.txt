@@ -1,0 +1,5 @@
+Timestamp: 2026-10-12T15:20:01.4887915+05:30
+Endpoint: GET /health
+HTTP Status: 200
+Response:
+{"status":"ok","service":"Biomedical Drug Safety Evidence Intelligence System"}

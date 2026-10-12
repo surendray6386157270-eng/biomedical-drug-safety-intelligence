@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+pydantic
+httpx
+pandas
+scikit-learn
+pytest
+pytest-cov
+python-dotenv
