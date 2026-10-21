@@ -16,7 +16,7 @@ It retrieves publicly available adverse-event reports from FDA FAERS through the
 
 
 
-\*\*Important:\*\* This system is intended for evidence exploration and research support. It is not a medical diagnosis, treatment recommendation, or clinical decision-making system.
+**Important:** This system is intended for evidence exploration and research support. It is not a medical diagnosis, treatment recommendation, or clinical decision-making system.
 
 
 
@@ -36,11 +36,11 @@ Initial implementation commit: `cb4597a`
 
 
 
-Repository visibility: Private
+Repository visibility: Public
 
 
 
-Access must be granted to authorized BHIV reviewers.
+The repository can be accessed through the public GitHub URL.
 
 
 
@@ -48,29 +48,29 @@ Access must be granted to authorized BHIV reviewers.
 
 
 
-\- FDA FAERS/openFDA source connector
+- FDA FAERS/openFDA source connector
 
-\- Drug-specific adverse-event ingestion pipeline
+- Drug-specific adverse-event ingestion pipeline
 
-\- Evidence validation and normalization
+- Evidence validation and normalization
 
-\- Deterministic evidence identifiers
+- Deterministic evidence identifiers
 
-\- Source provenance and traceability
+- Source provenance and traceability
 
-\- SQLite evidence storage
+- SQLite evidence storage
 
-\- Drug-specific evidence search
+- Drug-specific evidence search
 
-\- Descriptive adverse-reaction analysis
+- Descriptive adverse-reaction analysis
 
-\- FastAPI endpoints and interactive API documentation
+- FastAPI endpoints and interactive API documentation
 
-\- Browser-based research interface
+- Browser-based research interface
 
-\- Automated unit and integration tests
+- Automated unit and integration tests
 
-\- Architecture and dataset documentation
+- Architecture and dataset documentation
 
 
 
@@ -78,19 +78,19 @@ Access must be granted to authorized BHIV reviewers.
 
 
 
-\- Python 3.12
+- Python 3.12
 
-\- FastAPI
+- FastAPI
 
-\- Pydantic
+- Pydantic
 
-\- HTTPX
+- HTTPX
 
-\- SQLite
+- SQLite
 
-\- Pytest
+- Pytest
 
-\- HTML-based research interface
+- HTML-based research interface
 
 
 
@@ -134,11 +134,11 @@ Open the following URLs:
 
 
 
-\- Research interface: http://127.0.0.1:8000/
+- Research interface: http://127.0.0.1:8000/
 
-\- API documentation: http://127.0.0.1:8000/docs
+- API documentation: http://127.0.0.1:8000/docs
 
-\- Health endpoint: http://127.0.0.1:8000/health
+- Health endpoint: http://127.0.0.1:8000/health
 
 
 
@@ -162,7 +162,7 @@ The latest local automated test execution completed successfully.
 
 
 
-\*\*Result: 18 tests passed.\*\*
+**Result: 18 tests passed.**
 
 
 
@@ -170,7 +170,7 @@ Verified capabilities include evidence normalization, ingestion, pipeline behavi
 
 
 
-Supporting evidence is stored in the `evidence\_packet/` directory.
+Supporting evidence is stored in the `evidence_packet/` directory.
 
 
 
@@ -182,13 +182,13 @@ The repository contains:
 
 
 
-\- `evidence\_packet/screenshots/` — research interface, no-evidence handling, API documentation, ingestion, and test execution screenshots.
+- `evidence_packet/screenshots/` — research interface, no-evidence handling, API documentation, ingestion, and test execution screenshots.
 
-\- `evidence\_packet/api\_samples/` — sample evidence and analysis API responses.
+- `evidence_packet/api_samples/` — sample evidence and analysis API responses.
 
-\- `evidence\_packet/runtime\_logs/` — automated test results and health endpoint verification.
+- `evidence_packet/runtime_logs/` — automated test results and health endpoint verification.
 
-\- `evidence\_packet/deployment\_proof/` — local runtime environment details.
+- `evidence_packet/deployment_proof/` — local runtime environment details.
 
 
 
@@ -196,19 +196,19 @@ The repository contains:
 
 
 
-\- FDA FAERS contains spontaneous adverse-event reports.
+- FDA FAERS contains spontaneous adverse-event reports.
 
-\- Report frequencies must not be interpreted as population incidence rates.
+- Report frequencies must not be interpreted as population incidence rates.
 
-\- Reported drug-event associations do not establish causation.
+- Reported drug-event associations do not establish causation.
 
-\- Data may include incomplete records, duplicates, reporting bias, and other limitations.
+- Data may include incomplete records, duplicates, reporting bias, and other limitations.
 
-\- The current analytics implementation is descriptive; no trained predictive machine-learning model or model-performance evaluation is claimed.
+- The current analytics implementation is descriptive; no trained predictive machine-learning model or model-performance evaluation is claimed.
 
-\- Production deployment, authentication, access control, and operational monitoring have not been demonstrated.
+- Production deployment, authentication, access control, and operational monitoring have not been demonstrated.
 
-\- The system must not be used to make patient-specific medical decisions.
+- The system must not be used to make patient-specific medical decisions.
 
 
 
@@ -220,13 +220,13 @@ Additional technical information is available in:
 
 
 
-\- `README.md`
+- `README.md`
 
-\- `ARCHITECTURE.md`
+- `ARCHITECTURE.md`
 
-\- `docs/dataset\_registry.md`
+- `docs/dataset_registry.md`
 
-\- `docs/data\_dictionary.md`
+- `docs/data_dictionary.md`
 
 
 
@@ -238,7 +238,7 @@ The prototype implementation, local testing, documentation, evidence packet, and
 
 
 
-The project is available in a private repository for authorized review.
+The project is available in a public GitHub repository for review.
 
 
 
