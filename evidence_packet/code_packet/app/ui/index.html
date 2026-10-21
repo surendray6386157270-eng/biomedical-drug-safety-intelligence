@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biomedical Drug Safety Evidence Intelligence</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #172554;
+            color: white;
+            padding: 28px 40px;
+        }
+
+        .header h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin: 0;
+            color: #cbd5e1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 24px;
+        }
+
+        .search-panel {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 24px;
+        }
+
+        .search-panel h2 {
+            margin-top: 0;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .search-row input {
+            flex: 1;
+            padding: 13px 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .search-row button {
+            padding: 13px 24px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .search-row button:hover {
+            background: #1d4ed8;
+        }
+
+        .search-row button:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .status.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status.info {
+            display: block;
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .results {
+            display: none;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .source-header {
+            background: #ecfdf5;
+            color: #065f46;
+        }
+
+        .analysis-header {
+            background: #eff6ff;
+            color: #1e40af;
+        }
+
+        .section-body {
+            padding: 24px;
+        }
+
+        .metadata {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .metadata-card {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .metadata-card .label {
+            font-size: 12px;
+            color: #64748b;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .metadata-card .value {
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+
+        th {
+            background: #f8fafc;
+            font-size: 13px;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        .provenance {
+            margin-top: 20px;
+        }
+
+        .provenance details {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .provenance summary {
+            padding: 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .provenance-content {
+            padding: 15px;
+            background: #f8fafc;
+            font-size: 13px;
+        }
+
+        .provenance-content div {
+            margin-bottom: 8px;
+        }
+
+        .reaction-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .reaction-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 13px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .reaction-name {
+            font-weight: 600;
+        }
+
+        .reaction-proportion {
+            color: #475569;
+        }
+
+        .limitations {
+            margin-top: 24px;
+            padding: 18px;
+            background: #fff7ed;
+            border-left: 4px solid #f97316;
+            border-radius: 6px;
+        }
+
+        .limitations h3 {
+            margin-top: 0;
+        }
+
+        .limitations ul {
+            margin-bottom: 0;
+        }
+
+        .empty {
+            padding: 30px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .footer {
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            padding: 30px;
+        }
+
+        @media (max-width: 700px) {
+            .header {
+                padding: 22px;
+            }
+
+            .container {
+                padding: 0 12px;
+            }
+
+            .search-row {
+                flex-direction: column;
+            }
+
+            .search-row button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+    <h1>Biomedical Drug Safety Evidence Intelligence</h1>
+    <p>Research interface for FDA FAERS / openFDA evidence and system analysis</p>
+</header>
+
+<main class="container">
+
+    <section class="search-panel">
+        <h2>Research Query</h2>
+
+        <div class="search-row">
+            <input
+                id="drugInput"
+                type="text"
+                placeholder="Enter drug name, e.g. aspirin"
+                autocomplete="off"
+            >
+            <button id="searchButton" onclick="runResearchQuery()">
+                Search
+            </button>
+        </div>
+
+        <div id="status" class="status"></div>
+    </section>
+
+    <div id="results" class="results">
+
+        <!-- SOURCE EVIDENCE -->
+        <section class="section">
+
+            <div class="section-header source-header">
+                <h2>SOURCE EVIDENCE</h2>
+            </div>
+
+            <div class="section-body">
+
+                <div id="sourceMetadata" class="metadata"></div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Reaction / Event</th>
+                                <th>Event Date</th>
+                                <th>Source Record ID</th>
+                                <th>Evidence Type</th>
+                            </tr>
+                        </thead>
+                        <tbody id="evidenceTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="provenance">
+                    <h3>Evidence Provenance</h3>
+                    <div id="provenanceList"></div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SYSTEM ANALYSIS -->
+        <section class="section">
+
+            <div class="section-header analysis-header">
+                <h2>SYSTEM ANALYSIS</h2>
+            </div>
+
+            <div class="section-body">
+
+                <div id="analysisMetadata" class="metadata"></div>
+
+                <h3>Top Reported Reactions</h3>
+
+                <ul id="reactionList" class="reaction-list"></ul>
+
+                <div id="limitations" class="limitations"></div>
+
+            </div>
+        </section>
+
+    </div>
+
+</main>
+
+<footer class="footer">
+    Biomedical Drug Safety Evidence Intelligence System —
+    Research prototype. Not a clinical decision system.
+</footer>
+
+<script>
+
+async function runResearchQuery() {
+
+    const input = document.getElementById("drugInput");
+    const button = document.getElementById("searchButton");
+    const status = document.getElementById("status");
+    const results = document.getElementById("results");
+
+    const drug = input.value.trim();
+
+    results.style.display = "none";
+    status.className = "status";
+
+    if (!drug) {
+        showError("Please enter a drug name.");
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Searching...";
+
+    showInfo("Retrieving evidence and running analysis...");
+
+    try {
+
+        const encodedDrug = encodeURIComponent(drug);
+
+        const evidenceResponse = await fetch(
+            `/api/drugs/${encodedDrug}/evidence?limit=10`
+        );
+
+        if (!evidenceResponse.ok) {
+            throw new Error(
+                `Evidence API returned HTTP ${evidenceResponse.status}`
+            );
+        }
+
+        const evidenceData = await evidenceResponse.json();
+
+        const analysisResponse = await fetch(
+            `/api/drugs/${encodedDrug}/analysis?limit=10`
+        );
+
+        if (!analysisResponse.ok) {
+            throw new Error(
+                `Analysis API returned HTTP ${analysisResponse.status}`
+            );
+        }
+
+        const analysisData = await analysisResponse.json();
+
+        renderEvidence(evidenceData);
+        renderAnalysis(analysisData);
+
+        results.style.display = "block";
+        status.className = "status";
+
+    } catch (error) {
+
+        showError(
+            `Research query failed: ${error.message}`
+        );
+
+    } finally {
+
+        button.disabled = false;
+        button.textContent = "Search";
+    }
+}
+
+
+function renderEvidence(data) {
+
+    const metadata = document.getElementById("sourceMetadata");
+    const tableBody = document.getElementById("evidenceTableBody");
+    const provenanceList = document.getElementById("provenanceList");
+
+    const evidence = data.evidence || [];
+
+    metadata.innerHTML = `
+        <div class="metadata-card">
+            <div class="label">Drug</div>
+            <div class="value">${escapeHtml(data.drug_name || "UNKNOWN")}</div>
+        </div>
+
+        <div class="metadata-card">
+            <div class="label">Source</div>
+            <div class="value">${escapeHtml(
+                evidence[0]?.source || "FDA FAERS / openFDA"
+            )}</div>
+        </div>
+
+        <div class="metadata-card">
+            <div class="label">Evidence Records</div>
+            <div class="value">${evidence.length}</div>
+        </div>
+
+        <div class="metadata-card">
+            <div class="label">Schema Version</div>
+            <div class="value">${escapeHtml(
+                evidence[0]?.schema_version || "UNKNOWN"
+            )}</div>
+        </div>
+    `;
+
+    if (evidence.length === 0) {
+
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="4">
+                    <div class="empty">
+                        No evidence records were returned.
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        provenanceList.innerHTML = "";
+        return;
+    }
+
+    tableBody.innerHTML = evidence.map(record => `
+        <tr>
+            <td>${escapeHtml(record.reaction || "UNKNOWN")}</td>
+            <td>${escapeHtml(record.event_date || "UNKNOWN")}</td>
+            <td>${escapeHtml(record.source_record_id || "UNKNOWN")}</td>
+            <td>${escapeHtml(record.evidence_type || "UNKNOWN")}</td>
+        </tr>
+    `).join("");
+
+    provenanceList.innerHTML = evidence.map((record, index) => {
+
+        const provenance = record.provenance || {};
+
+        return `
+            <details>
+                <summary>
+                    Evidence ${index + 1} —
+                    Source Record ${escapeHtml(
+                        record.source_record_id || "UNKNOWN"
+                    )}
+                </summary>
+
+                <div class="provenance-content">
+
+                    <div>
+                        <strong>Source:</strong>
+                        ${escapeHtml(provenance.source || record.source || "UNKNOWN")}
+                    </div>
+
+                    <div>
+                        <strong>Source URL:</strong>
+                        ${escapeHtml(provenance.source_url || record.source_reference || "UNKNOWN")}
+                    </div>
+
+                    <div>
+                        <strong>Source Record ID:</strong>
+                        ${escapeHtml(provenance.source_record_id || record.source_record_id || "UNKNOWN")}
+                    </div>
+
+                    <div>
+                        <strong>Retrieved At:</strong>
+                        ${escapeHtml(provenance.retrieved_at || record.retrieved_at || "UNKNOWN")}
+                    </div>
+
+                    <div>
+                        <strong>Schema Version:</strong>
+                        ${escapeHtml(provenance.schema_version || record.schema_version || "UNKNOWN")}
+                    </div>
+
+                    <div>
+                        <strong>Transformation:</strong>
+                        ${escapeHtml(provenance.transformation || "UNKNOWN")}
+                    </div>
+
+                    <div>
+                        <strong>Raw Record Reference:</strong>
+                        ${escapeHtml(
+                            provenance.raw_record_reference ||
+                            record.raw_record_reference ||
+                            "UNKNOWN"
+                        )}
+                    </div>
+
+                </div>
+            </details>
+        `;
+
+    }).join("");
+}
+
+
+function renderAnalysis(data) {
+
+    const metadata = document.getElementById("analysisMetadata");
+    const reactionList = document.getElementById("reactionList");
+    const limitations = document.getElementById("limitations");
+
+    const analysis = data.analysis || {};
+
+    metadata.innerHTML = `
+        <div class="metadata-card">
+            <div class="label">Analysis Type</div>
+            <div class="value">${escapeHtml(
+                data.analysis_type || "UNKNOWN"
+            )}</div>
+        </div>
+
+        <div class="metadata-card">
+            <div class="label">Input Evidence</div>
+            <div class="value">${analysis.total_records ?? 0}</div>
+        </div>
+
+        <div class="metadata-card">
+            <div class="label">Unique Reactions</div>
+            <div class="value">${analysis.unique_reactions ?? 0}</div>
+        </div>
+    `;
+
+    const reactions = analysis.top_reactions || [];
+
+    if (reactions.length === 0) {
+
+        reactionList.innerHTML = `
+            <li class="empty">
+                No reaction analysis available.
+            </li>
+        `;
+
+    } else {
+
+        reactionList.innerHTML = reactions.map(item => {
+
+            const name = item.reaction || item.name || "UNKNOWN";
+            const proportion = item.proportion;
+
+            return `
+                <li class="reaction-item">
+                    <span class="reaction-name">
+                        ${escapeHtml(name)}
+                    </span>
+
+                    <span class="reaction-proportion">
+                        ${
+                            proportion !== undefined
+                                ? `${(proportion * 100).toFixed(1)}%`
+                                : ""
+                        }
+                    </span>
+                </li>
+            `;
+
+        }).join("");
+    }
+
+    const limitationItems = analysis.limitations || [];
+
+    limitations.innerHTML = `
+        <h3>Interpretation Limitations</h3>
+
+        <ul>
+            ${
+                limitationItems.length
+                    ? limitationItems.map(item =>
+                        `<li>${escapeHtml(item)}</li>`
+                    ).join("")
+                    : "<li>No limitations returned.</li>"
+            }
+        </ul>
+    `;
+}
+
+
+function showError(message) {
+
+    const status = document.getElementById("status");
+
+    status.className = "status error";
+    status.textContent = message;
+}
+
+
+function showInfo(message) {
+
+    const status = document.getElementById("status");
+
+    status.className = "status info";
+    status.textContent = message;
+}
+
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+document.getElementById("drugInput").addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Enter") {
+            runResearchQuery();
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>

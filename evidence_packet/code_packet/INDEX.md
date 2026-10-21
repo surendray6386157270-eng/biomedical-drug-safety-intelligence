@@ -4,7 +4,7 @@
 
 This index identifies the key implementation files for reviewing the biomedical drug safety intelligence prototype.
 
-The source files remain in their original repository locations. This index links to them rather than duplicating code.
+The code packet contains copies of the key implementation files under their original relative paths. The original source files remain in the main repository and are the authoritative runtime versions.
 
 ## 2. Three Priority Files
 
@@ -137,3 +137,22 @@ The project does not implement predictive clinical risk estimation, diagnosis, o
 ## 10. Conclusion
 
 The code packet provides a focused path through the implementation, connecting source ingestion, normalized evidence, provenance, persistence, descriptive analytics, and reviewer-verifiable outputs.
+
+
+## 11. Included Code Packet Files
+
+These are review copies. The corresponding files in the repository root are the authoritative runtime implementations.
+
+| Code packet path | Purpose | Why it matters | Relationship to runtime |
+|---|---|---|---|
+| `app/connectors/openfda.py` | Retrieves FDA FAERS data | Establishes real biomedical data sourcing | Used during source retrieval |
+| `app/models/evidence.py` | Defines the evidence schema | Supports structured, versioned evidence | Validates evidence records |
+| `app/services/normalization.py` | Normalizes source records | Preserves consistent evidence fields and identifiers | Used during ingestion |
+| `app/services/pipeline.py` | Coordinates pipeline execution | Connects ingestion, storage and analysis | Orchestrates the processing flow |
+| `app/services/analysis.py` | Provides the analysis service | Connects stored evidence to analytical results | Used during analysis requests |
+| `app/analytics/drug_reaction.py` | Computes reaction summaries | Implements the required analytical capability | Calculates descriptive statistics |
+| `app/main.py` | Initializes the FastAPI application | Provides the application entry point | Used when starting the server |
+| `app/ui/index.html` | Provides the research interface | Makes evidence accessible to researchers | Served by the application |
+| `tests/test_openfda.py` | Tests source connector behavior | Verifies retrieval and failure handling | Executed by pytest |
+| `tests/test_pipeline.py` | Tests pipeline behavior | Verifies integration of processing stages | Executed by pytest |
+| `requirements.txt` | Declares Python dependencies | Supports reproducible installation | Used during environment setup |
